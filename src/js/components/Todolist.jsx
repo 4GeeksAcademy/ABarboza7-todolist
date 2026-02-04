@@ -11,6 +11,17 @@ const Todolist = () => {
         }
     };
 
+    const tocarEnter = (e) => {
+        if (e.key === "Enter") {
+            addTarea();
+        }
+    };
+
+    const eliminarTarea = (indexEliminar) => {
+        const nuevasTareas = tareas.filter((_, index) => index !== indexEliminar);
+        setTareas(nuevasTareas);
+    };
+
     return (
         <main className="phone-container">
             <div className="encabezado">
@@ -19,13 +30,36 @@ const Todolist = () => {
             </div>
             <ul className="list-group">
                 <li className="list-group-item">
-                    <input type="text" value={nuevaTarea} onChange={(e) => setNuevaTarea(e.target.value)}
-                        className="form-control" placeholder="Ingresa tarea..." />
+                    <input
+                        type="text"
+                        value={nuevaTarea}
+                        onChange={(e) => setNuevaTarea(e.target.value)}
+                        onKeyDown={tocarEnter}
+                        className="form-control"
+                        placeholder="Ingresa tarea..."
+                    />
                 </li>
-                {tareas.map((tarea, index) => (<li key={index} className="list-group-item">{tarea}</li>))}
+
+                {tareas.length === 0 ? (
+                    <li className="list-group-item text-muted text-center" style={{ fontStyle: 'italic' }}>
+                        "No hay tareas, añadir tareas"
+                    </li>) : (tareas.map((tarea, index) => (
+                        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                            {tarea}
+                            <span
+                                className="delete-icon"
+                                onClick={() => eliminarTarea(index)}
+                                style={{ cursor: 'pointer', color: 'red', fontWeight: 'bold' }}
+                            >
+                                x
+                            </span>
+                        </li>
+                    ))
+                )}
             </ul>
-            <button onClick={addTarea} className="btn btn-primary">Add Tarea</button>
         </main>
     );
 };
+
 export default Todolist;
+
